@@ -1,0 +1,167 @@
+GantSign Development Containers
+===============================
+:toc:
+:toc-placement: preamble
+:showtitle:
+
+This project contains Docker container images that provide a command line
+development environment for use with
+https://code.visualstudio.com/docs/remote/containers[VS Code].
+
+== Prerequisites
+
+If your don't want to see the occasional garbled character, you'll need to
+install a couple of fonts and set your terminal emulator to use the Nerd Font.
+
+* A https://www.nerdfonts.com[Nerd Font] installed and enabled in your terminal
+* An emoji font e.g.
++
+.Debian/Ubuntu
+[source,bash]
+----
+sudo apt install fonts-noto-color-emoji
+----
++
+.RedHat/Amazon
+[source,bash]
+----
+sudo dnf install google-noto-emoji-fonts
+----
+
+== Base container
+
+The base container is the smallest container for development that doesn't
+require Docker or Kubernetes.
+
+=== Features
+
+In addition to basic GNU/Linux command line tools this container contains the
+following:
+
+* https://github.com/sharkdp/bat[bat] a `cat` alternative with syntax highlighting
+* https://github.com/aristocratos/btop[btop] a color `top` alternative with broader information
+* https://github.com/mollifier/cd-gitroot[cd-gitroot] change directory relative to the root of the current Git repo
+* https://github.com/dandavison/delta[Delta] for more readable diffs
+* https://github.com/muesli/duf[duf] a `df` alternative with easier to read output
+* https://github.com/bootandy/dust[Dust] a `du` alternative with easier to read output
+* https://github.com/b4b4r07/emoji-cli[emoji-cli] help writing emoji aliases
+* https://github.com/mrowa44/emojify[emojify] for converting emoji aliases to characters
+* https://github.com/zdharma/fast-syntax-highlighting[Fast Syntax Highlighting (F-Sy-H)] syntax highlighting for the command line
+* https://github.com/sharkdp/fd[fd] an easier to use `find` alternative
+* https://github.com/junegunn/fzf[fzf] a general-purpose command-line fuzzy finder
+* https://github.com/Aloxaf/fzf-tab[fzf-tab] use `fzf` for tab-completion
+* https://github.com/garabik/grc[Generic Colouriser] add color output to many basic GNU/Linux commands
+* https://github.com/cli/cli[GitHub CLI] to make GitHub easier to work with from the command line
+* https://github.com/nicolargo/glances[Glances] a color `top` alternative with broader information
+* https://github.com/sharkdp/hexyl[hexyl] hex viewer
+* https://htop.dev[htop] a color `top` alternative
+* https://httpie.io[HTTPie] easier to use `curl` alternative with color output
+* https://github.com/httpie/http-prompt[HTTP Prompt] interactive interface to HTTPie
+* https://github.com/Orange-OpenSource/hurl[Hurl] for testing REST APIs
+* https://github.com/sharkdp/hyperfine[hyperfine] benchmarking tool
+* https://github.com/jesseduffield/lazygit[lazygit] a terminal UI for git commands
+* https://github.com/Peltoche/lsd[LSD (LSDeluxe)] a `ls`/`tree` alternative with color and icons
+* https://github.com/nvm-sh/nvm[Node Version Manager] for installing/managing versions of Node.js
+* https://stedolan.github.io/jq/[jq] for manipulating JSON
+* https://ohmyz.sh[Oh My Zsh] for tab-completion and aliases
+* https://github.com/pypa/pipenv[Pipenv] for managing Python dependencies/virtualenvs
+* https://github.com/pypa/pipx[pipx] for installing Python applications
+* https://github.com/dalance/procs[procs] a `ps` alternative with color and keyword search
+* https://github.com/BurntSushi/ripgrep[ripgrep] for searching files/directories for text
+* https://github.com/chmln/sd[sd] easy to use `sed` alternative
+* https://sdkman.io[SDKMAN!] for installing/managing SDKs such as Java and Maven
+* https://starship.rs[starship] a full featured shell prompt
+* https://github.com/ggreer/the_silver_searcher[The Silver Searcher] for searching files/directories for text
+* https://github.com/XAMPPRocky/tokei[Tokei] view stats about your code
+* https://github.com/MichaelAquilina/zsh-you-should-use[You Should Use] to remind you of available shell aliases
+* https://github.com/ajeetdsouza/zoxide[zoxide] easily navigate to previous directories
+* https://github.com/zplug/zplug[zplug] for managing Zsh plugins (including Oh My Zsh)
+* https://github.com/zsh-users/zsh-autosuggestions[zsh-autosuggestions] suggests commands as you type based on history and completions
+
+=== Running standalone
+
+If you just want to try it out, you can run it standalone:
+
+[source,bash]
+----
+docker run --rm -ti ghcr.io/gantsign/devcontainer-base
+----
+
+=== Running in VS Code
+
+First you need to create a `.devcontainer/devcontainer.json` file in the root
+of your project:
+
+..devcontainer/devcontainer.json
+[source,js]
+----
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "GantSign",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+
+	"settings": {
+		"editor.renderWhitespace": "all",
+		"editor.rulers": [
+			80,
+			100,
+			120
+		],
+		"editor.guides.bracketPairs": true
+	},
+
+	"extensions": [
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	],
+
+	"forwardPorts": [],
+
+	"mounts": [
+		"source=devcontainer-history,target=/home/dev/.shell_history,type=volume",
+		"source=devcontainer-zoxide,target=/home/dev/.local/share/zoxide,type=volume"
+	],
+
+	"runArgs": [
+		// [Optional] Uncomment for improved security, requires https://github.com/nestybox/sysbox to be installed
+		// "--runtime=sysbox-runc"
+	],
+
+	"remoteUser": "dev",
+}
+----
+
+Then you need to create a docker file:
+
+..devcontainer/Dockerfile
+[source,Dockerfile]
+----
+FROM ghcr.io/gantsign/devcontainer-base
+
+# ** [Optional] Uncomment this section to install additional packages. **
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+# ** [Optional] Uncomment this section to install SDKs. **
+# SHELL [ "/usr/bin/bash", "--login", "-c" ]
+# RUN sdk_install java 11
+# RUN sdk_install maven 3
+# RUN nvm install --lts
+----
+
+Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
+from the menu.
+
+== License
+
+This project uses the Unlicense but the resulting container images contain
+software under various different open-source licenses.
+
+== Author information
+
+John Freeman
+
+GantSign Ltd.
+Company No. 06109112 (registered in England)

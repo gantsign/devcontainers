@@ -1,0 +1,7 @@
+os:
+  openCommand: "sh -c 'exec code --reuse-window --goto {{filename}}'"
+git:
+  paging:
+    colorArg: always
+    # More readable diffs
+    pager: delta --paging=never
