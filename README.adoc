@@ -3,6 +3,13 @@ GantSign Development Containers
 :toc:
 :toc-placement: preamble
 :showtitle:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
 This project contains Docker container images that provide a command line
 development environment for use with
@@ -133,12 +140,109 @@ of your project:
 }
 ----
 
-Then you need to create a docker file:
+Then you need to create a Dockerfile:
 
 ..devcontainer/Dockerfile
 [source,Dockerfile]
 ----
 FROM ghcr.io/gantsign/devcontainer-base
+
+# ** [Optional] Uncomment this section to install additional packages. **
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+# ** [Optional] Uncomment this section to install SDKs. **
+# SHELL [ "/usr/bin/bash", "--login", "-c" ]
+# RUN sdk_install java 11
+# RUN sdk_install maven 3
+# RUN nvm install --lts
+----
+
+Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
+from the menu.
+
+== DinD container
+
+For when you need to use Docker for development. The DinD container contains
+everything in the base container as well as Docker-in-Docker and related tools.
+
+=== Features
+
+In addition to the tools in the base container the DinD container also contains
+the following:
+
+* https://ctop.sh[ctop] a `top` like tool for containers
+* https://github.com/wagoodman/dive[dive] a tool for exploring Docker images
+* https://www.docker.com[Docker] the most well know container tool
+* https://docs.docker.com/compose/[Docker Compose] a tool for defining and running multi-container Docker applications
+* https://github.com/jesseduffield/lazydocker[Lazydocker] a simple terminal UI for Docker & Docker Compose
+
+=== Running in VS Code
+
+First you need to create a `.devcontainer/devcontainer.json` file in the root
+of your project:
+
+..devcontainer/devcontainer.json
+[source,js]
+----
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "GantSign",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+
+	"settings": {
+		"editor.renderWhitespace": "all",
+		"editor.rulers": [
+			80,
+			100,
+			120
+		],
+		"editor.guides.bracketPairs": true
+	},
+
+	"extensions": [
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	],
+
+	"forwardPorts": [],
+
+	"mounts": [
+		"source=devcontainer-history,target=/home/dev/.shell_history,type=volume",
+		"source=devcontainer-zoxide,target=/home/dev/.local/share/zoxide,type=volume",
+		// To preserve Docker images between runs
+		"source=devcontainer-docker,target=/var/lib/docker,type=volume"
+	],
+
+	"runArgs": [
+		// Requires https://github.com/nestybox/sysbox to be installed
+		"--runtime=sysbox-runc"
+	],
+
+	"remoteUser": "dev",
+
+	// So the docker init script runs
+	"overrideCommand": false
+}
+----
+
+[NOTE]
+====
+For Docker-in-Docker to work, it either needs to be run with
+https://github.com/nestybox/sysbox[sysbox] `--runtime=sysbox-runc` (which you
+need to install on your host machine) or with the `--privileged` flag. See
+https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/ for
+why you should avoid the `--privileged` flag.
+====
+
+Then you need to create a Dockerfile:
+
+..devcontainer/Dockerfile
+[source,Dockerfile]
+----
+FROM ghcr.io/gantsign/devcontainer-dind
 
 # ** [Optional] Uncomment this section to install additional packages. **
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \

@@ -1,0 +1,3 @@
+oS:
+  openCommand: "sh -c 'exec code --reuse-window --goto {{filename}}'"
+  openLinkCommand: 'sh -c "exec $BROWSER {{link}}"'
