@@ -1,0 +1,41 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "GantSign",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+
+	"settings": {
+		"editor.renderWhitespace": "all",
+		"editor.rulers": [
+			80,
+			100,
+			120
+		],
+		"editor.guides.bracketPairs": true
+	},
+
+	"extensions": [
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	],
+
+	"forwardPorts": [],
+
+	"mounts": [
+		"source=devcontainer-history,target=/home/dev/.shell_history,type=volume",
+		"source=devcontainer-zoxide,target=/home/dev/.local/share/zoxide,type=volume",
+		// To preserve Docker images between runs
+		"source=devcontainer-docker,target=/var/lib/docker,type=volume"
+	],
+
+	"runArgs": [
+		// Requires https://github.com/nestybox/sysbox to be installed
+		"--runtime=sysbox-runc"
+	],
+
+	"remoteUser": "dev",
+
+	// So the docker init script runs
+	"overrideCommand": false
+}
