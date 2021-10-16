@@ -20,7 +20,9 @@
 		"editorconfig.editorconfig"
 	],
 
-	"forwardPorts": [],
+	"forwardPorts": [
+		6443 // k3s
+	],
 
 	"mounts": [
 		"source=devcontainer-history,target=/home/dev/.shell_history,type=volume",
@@ -32,10 +34,12 @@
 	"runArgs": [
 		// Requires https://github.com/nestybox/sysbox to be installed
 		"--runtime=sysbox-runc"
+		// To use Telepresence you need to use --privileged instead of Sysbox
+		// "--privileged"
 	],
 
 	"remoteUser": "dev",
 
-	// So the Docker init script runs
+	// So the Docker & K3s init script runs
 	"overrideCommand": false
 }
