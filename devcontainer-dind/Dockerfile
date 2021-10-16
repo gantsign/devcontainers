@@ -41,8 +41,9 @@ RUN echo "zplug 'plugins/docker', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplu
     && echo "zplug 'plugins/docker-compose', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplugrc.zsh
 
 # To run zplug install
-RUN zsh -c 'source /usr/share/zplug/init.zsh && zplug clear' \
-    && zsh -c 'export TERM=xterm && source ~/.zshrc'
+# Workaround: https://github.com/zplug/zplug/issues/272
+RUN bash -c "zsh <<< 'source /usr/share/zplug/init.zsh && zplug clear' \
+    && zsh <<< 'export TERM=xterm && source ~/.zshrc'"
 
 USER root
 WORKDIR /
