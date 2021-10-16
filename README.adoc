@@ -223,7 +223,7 @@ of your project:
 
 	"remoteUser": "dev",
 
-	// So the docker init script runs
+	// So the Docker init script runs
 	"overrideCommand": false
 }
 ----
@@ -253,6 +253,118 @@ FROM ghcr.io/gantsign/devcontainer-dind
 # RUN sdk_install java 11
 # RUN sdk_install maven 3
 # RUN nvm install --lts
+----
+
+Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
+from the menu.
+
+== K8s container
+
+For when you need to use Kubernetes for development. The K8s container contains
+everything in the DinD container as well as K3s and related tools.
+
+=== Features
+
+In addition to the tools in the DinD container the K3s container also contains
+the following:
+
+* https://helm.sh[Helm] Kubernetes package manager
+* https://k3s.io[K3s] lightweight Kubernetes distribution
+* https://k9scli.io[k9s] terminal UI for Kubernetes
+* https://github.com/ahmetb/kubectx/[kubectx] for switching between Kubernetes contexts
+* https://github.com/ahmetb/kubectx/[kubens] for switching between Kubernetes namespaces
+* https://kustomize.io[Kustomize] for customizing application configuration
+* https://github.com/stern/stern[stern] allows you to `tail` multiple pods
+* https://www.telepresence.io[Telepresence] bridge between local dev and your Kubernetes cluster
+
+=== Running in VS Code
+
+First you need to create a `.devcontainer/devcontainer.json` file in the root
+of your project:
+
+..devcontainer/devcontainer.json
+[source,js]
+----
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "GantSign",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+
+	"settings": {
+		"editor.renderWhitespace": "all",
+		"editor.rulers": [
+			80,
+			100,
+			120
+		],
+		"editor.guides.bracketPairs": true
+	},
+
+	"extensions": [
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	],
+
+	"forwardPorts": [],
+
+	"mounts": [
+		"source=devcontainer-history,target=/home/dev/.shell_history,type=volume",
+		"source=devcontainer-zoxide,target=/home/dev/.local/share/zoxide,type=volume",
+		// To preserve Docker images between runs
+		"source=devcontainer-docker,target=/var/lib/docker,type=volume"
+	],
+
+	"runArgs": [
+		// Requires https://github.com/nestybox/sysbox to be installed
+		"--runtime=sysbox-runc"
+		// To use Telepresence you need to use --privileged instead of Sysbox
+		// "--privileged"
+	],
+
+	"remoteUser": "dev",
+
+	// So the Docker & K3s init script runs
+	"overrideCommand": false
+}
+----
+
+[NOTE]
+====
+For Docker-in-Docker or K3s to work, they either needs to be run with
+https://github.com/nestybox/sysbox[sysbox] `--runtime=sysbox-runc` (which you
+need to install on your host machine) or with the `--privileged` flag. See
+https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/ for
+why you should avoid the `--privileged` flag.
+====
+
+[IMPORTANT]
+====
+For Telepresence to work you need to run the container with the `--privileged`
+flag instead of Sysbox.
+====
+
+Then you need to create a Dockerfile:
+
+..devcontainer/Dockerfile
+[source,Dockerfile]
+----
+FROM ghcr.io/gantsign/devcontainer-k8s
+
+# ** [Optional] Uncomment this section to install additional packages. **
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+# ** [Optional] Uncomment this section to install SDKs. **
+# SHELL [ "/usr/bin/bash", "--login", "-c" ]
+# RUN sdk_install java 11
+# RUN sdk_install maven 3
+# RUN nvm install --lts
+
+# ** [Optional] Uncomment this section if you don't want to run K3s on start. **
+# ENTRYPOINT ["/usr/local/share/docker-init.sh"]
+# CMD ["sleep", "infinity"]
 ----
 
 Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
