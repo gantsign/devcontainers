@@ -1,4 +1,4 @@
-FROM ghcr.io/gantsign/devcontainer-k8s
+FROM ghcr.io/gantsign/devcontainer-dind
 
 # ** [Optional] Uncomment this section to install additional packages. **
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
