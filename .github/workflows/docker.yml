@@ -41,6 +41,9 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=true
+          labels: |
+            org.opencontainers.image.title=Development Container Base
+            org.opencontainers.image.description=Base container image for development
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
