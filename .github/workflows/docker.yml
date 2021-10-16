@@ -51,6 +51,9 @@ jobs:
           context: ${{ env.DIR_NAME }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_base.outputs.tags }}
+          cache-from: type=registry,ref=${{ fromJSON(steps.meta_base.outputs.json).tags[1] }}
+          cache-to: type=inline
+          no-cache: ${{ github.event_name != 'pull_request' }}
           # Omit licenses label as there's no pratical way to get an accurate value for all the Ubuntu packages
           # org.opencontainers.image.licenses=
           labels: |
@@ -85,6 +88,9 @@ jobs:
           context: ${{ env.DIR_NAME }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_dind.outputs.tags }}
+          cache-from: type=registry,ref=${{ fromJSON(steps.meta_base.outputs.json).tags[1] }}
+          cache-to: type=inline
+          no-cache: ${{ github.event_name != 'pull_request' }}
           # Omit licenses label as there's no pratical way to get an accurate value for all the Ubuntu packages
           # org.opencontainers.image.licenses=
           labels: |
