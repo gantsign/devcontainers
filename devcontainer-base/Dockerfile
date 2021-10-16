@@ -349,8 +349,8 @@ RUN mkdir -p ~/.local/share/zoxide
 
 # To run zplug install
 # Workaround: https://github.com/zplug/zplug/issues/272
-RUN for i in {1..3}; do timeout 30s bash -c "\
+RUN for i in $(seq 1 3); do timeout 30s bash -c "\
 zsh <<< 'rm -rf ~/.zplug/repos; source /usr/share/zplug/init.zsh && zplug clear' \
-&& zsh <<< 'export TERM=xterm && source ~/.zshrc'" && break || [[ $i < 3 ]]; done
+&& zsh <<< 'export TERM=xterm && source ~/.zshrc'" && break || [ $i -lt 3 ]; done
 
 CMD [ "zsh" ]
