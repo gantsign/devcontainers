@@ -40,6 +40,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     pipenv \
     procps \
     pv \
+    python-is-python3 \
     python3-venv \
     shellcheck \
     silversearcher-ag\
@@ -81,7 +82,7 @@ RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.git
 
 # Install btop
 RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/aristocratos/btop/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"-linux-x86_64\\\\.tbz\$\"))'`" \
+        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"-x86_64-linux-musl\\\\.tbz\$\"))'`" \
     && curl -fsSL --output tmp.tbz "${URL}" \
     && mkdir -p /tmp/btop \
     && tar -C /tmp/btop -xvf tmp.tbz \
@@ -240,7 +241,7 @@ RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.git
         | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"x86_64-unknown-linux-musl\\\\.tar\\\\.gz\$\"))'`" \
     && curl -fsSL --output tmp.tar.gz "${URL}" \
     && mkdir -p /usr/local/share/zoxide \
-    && tar --strip-components=1 -C /usr/local/share/zoxide -xvf tmp.tar.gz \
+    && tar -C /usr/local/share/zoxide -xvf tmp.tar.gz \
     && ln -sf /usr/local/share/zoxide/zoxide /usr/local/bin/zoxide \
     && mkdir -p /usr/local/share/man/man1/ \
     && mv -f /usr/local/share/zoxide/man/* /usr/local/share/man/man1/ \
