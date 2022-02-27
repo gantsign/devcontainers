@@ -53,7 +53,6 @@ following:
 * https://github.com/bootandy/dust[Dust] a `du` alternative with easier to read output
 * https://github.com/b4b4r07/emoji-cli[emoji-cli] help writing emoji aliases
 * https://github.com/mrowa44/emojify[emojify] for converting emoji aliases to characters
-* https://github.com/zdharma/fast-syntax-highlighting[Fast Syntax Highlighting (F-Sy-H)] syntax highlighting for the command line
 * https://github.com/sharkdp/fd[fd] an easier to use `find` alternative
 * https://github.com/junegunn/fzf[fzf] a general-purpose command-line fuzzy finder
 * https://github.com/Aloxaf/fzf-tab[fzf-tab] use `fzf` for tab-completion
@@ -84,6 +83,7 @@ following:
 * https://github.com/ajeetdsouza/zoxide[zoxide] easily navigate to previous directories
 * https://github.com/zplug/zplug[zplug] for managing Zsh plugins (including Oh My Zsh)
 * https://github.com/zsh-users/zsh-autosuggestions[zsh-autosuggestions] suggests commands as you type based on history and completions
+* https://github.com/zsh-users/zsh-syntax-highlighting[zsh-syntax-highlighting] syntax highlighting for the command line
 
 === Running standalone
 
