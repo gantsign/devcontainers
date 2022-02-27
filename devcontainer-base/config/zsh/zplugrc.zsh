@@ -58,7 +58,7 @@ zplug '/usr/local/share/zsh/plugins/starship', from:local, defer:1
 zplug '/usr/local/share/zsh/plugins/zoxide', from:local, defer:1
 zplug 'b4b4r07/emoji-cli', from:github, defer:1
 # fzf-tab must be loaded after fzf and ohmyzsh/lib/completion.zsh
-# defer 2 is after compinit, fzf-tab must be loaded after compinit and before fast-syntax-highlighting
+# defer 2 is after compinit, fzf-tab must be loaded after compinit and before zsh-syntax-highlighting
 zplug 'Aloxaf/fzf-tab', from:github, defer:2
 zplug 'MichaelAquilina/zsh-you-should-use', from:github, defer:1
 # use fixed version of plugins with few users/stars
