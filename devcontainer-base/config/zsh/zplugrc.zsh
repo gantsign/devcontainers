@@ -1,5 +1,26 @@
 # Load Oh My Zsh library (this configures a lot of the basic Zsh settings)
-zplug 'robbyrussell/oh-my-zsh', use:'lib/*.zsh'
+oh_my_zsh_libs=(
+    clipboard
+    cli
+    compfix
+    completion
+    correction
+    diagnostics
+    directories
+    functions
+    git
+    grep
+    history
+    key-bindings
+    misc
+    nvm
+    prompt_info_functions
+    spectrum
+    termsupport
+    theme-and-appearance
+)
+for i ("$oh_my_zsh_libs[@]") zplug "lib/$i", from:oh-my-zsh
+unset oh_my_zsh_libs
 
 zplug "$HOME/.sdkman", from:local, use:'bin/sdkman-init.sh', defer:1
 
@@ -9,7 +30,7 @@ oh_my_zsh_plugins=(
    autopep8
    command-not-found
    copybuffer
-   copydir
+   copypath
    copyfile
    dirhistory
    fd
@@ -50,8 +71,8 @@ zplug 'plugins/mvn', from:oh-my-zsh, defer:2
 zplug "$HOME/.config/zsh", from:local, use:'custom.zsh', defer:2
 zplug "$HOME/.config/sh", from:local, use:'sdk_install.sh', defer:2
 
-# fast-syntax-highlighting must be loaded last (defer 3)
-zplug 'zdharma/fast-syntax-highlighting', from:github, defer:3
+# syntax-highlighting must be loaded last (defer 3)
+zplug 'zsh-users/zsh-syntax-highlighting', from:github, defer:3
 
 # fzf-tab config
 # disable sort when completing `git checkout`
