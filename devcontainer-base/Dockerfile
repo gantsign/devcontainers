@@ -13,8 +13,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     boxes \
     bzip2 \
     ca-certificates \
-    # https://bugs.launchpad.net/ubuntu/+source/command-not-found/+bug/1876034
-    # command-not-found \
+    command-not-found \
     cowsay \
     curl \
     dirmngr \
