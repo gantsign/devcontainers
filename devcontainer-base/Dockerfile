@@ -52,6 +52,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     tree \
     unzip \
     vim \
+    vim-airline \
     wget \
     xz-utils \
     zip \
@@ -340,6 +341,7 @@ RUN bat cache --build
 
 # Copy configuration
 COPY --chown=${USERNAME}:${USERNAME} config .config
+COPY --chown=${USERNAME}:${USERNAME} vimrc.vim .vimrc
 COPY --chown=${USERNAME}:${USERNAME} zshrc.zsh .zshrc
 
 # So we can persist the history using a volume mount
