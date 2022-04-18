@@ -45,6 +45,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     silversearcher-ag\
     software-properties-common \
     ssh-client \
+    ssh-tools \
     sudo \
     tmux \
     traceroute \

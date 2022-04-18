@@ -76,6 +76,7 @@ following:
 * https://github.com/BurntSushi/ripgrep[ripgrep] for searching files/directories for text
 * https://github.com/chmln/sd[sd] easy to use `sed` alternative
 * https://sdkman.io[SDKMAN!] for installing/managing SDKs such as Java and Maven
+* https://github.com/vaporup/ssh-tools[ssh-tools] command line utilities for SSH
 * https://starship.rs[starship] a full featured shell prompt
 * https://github.com/ggreer/the_silver_searcher[The Silver Searcher] for searching files/directories for text
 * https://github.com/XAMPPRocky/tokei[Tokei] view stats about your code
