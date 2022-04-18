@@ -2,6 +2,13 @@
 autoload bashcompinit
 bashcompinit
 
+# Add support for Oh My Zsh completion cache
+ZSH_COMPLETIONS_CACHE="$HOME/.zplug/repos/robbyrussell/oh-my-zsh/cache/completions"
+if [[ -d "$ZSH_COMPLETIONS_CACHE" ]]; then
+    (( ${fpath[(Ie)"$ZSH_COMPLETIONS_CACHE"]} )) || fpath=("$ZSH_COMPLETIONS_CACHE" $fpath)
+fi
+unset ZSH_COMPLETIONS_CACHE
+
 # Zplug init
 source /usr/share/zplug/init.zsh
 

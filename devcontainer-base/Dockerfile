@@ -352,6 +352,7 @@ RUN mkdir -p ~/.local/share/zoxide
 # Workaround: https://github.com/zplug/zplug/issues/272
 RUN for i in $(seq 1 3); do timeout 30s bash -c "\
 zsh <<< 'rm -rf ~/.zplug/repos; source /usr/share/zplug/init.zsh && zplug clear' \
-&& zsh <<< 'export TERM=xterm && source ~/.zshrc'" && break || [ $i -lt 3 ]; done
+&& zsh <<< 'export TERM=xterm && source ~/.zshrc'" && break || [ $i -lt 3 ]; done \
+&& mkdir -p ~/.zplug/repos/robbyrussell/oh-my-zsh/cache/completions
 
 CMD [ "zsh" ]
