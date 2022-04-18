@@ -80,6 +80,7 @@ following:
 * https://starship.rs[starship] a full featured shell prompt
 * https://github.com/ggreer/the_silver_searcher[The Silver Searcher] for searching files/directories for text
 * https://github.com/XAMPPRocky/tokei[Tokei] view stats about your code
+* https://github.com/vim-airline/vim-airline[vim-airline] status/tabline for vim
 * https://github.com/MichaelAquilina/zsh-you-should-use[You Should Use] to remind you of available shell aliases
 * https://github.com/ajeetdsouza/zoxide[zoxide] easily navigate to previous directories
 * https://github.com/zplug/zplug[zplug] for managing Zsh plugins (including Oh My Zsh)
