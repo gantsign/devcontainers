@@ -188,7 +188,7 @@ RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api
     && mkdir -p /usr/local/share/procs \
     && curl -fsSL --output /usr/local/share/procs/LICENSE "${URL}" \
     && URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/dalance/procs/releases \
-        | jq --raw-output \"[.[] | select(.prerelease == false)] | .[] | select(.tag_name == \\\"${VERSION}\\\") | .assets | .[] | .browser_download_url | select(test(\\\"x86_64-lnx\\\\\\.zip\$\\\"))\"`" \
+        | jq --raw-output \"[.[] | select(.prerelease == false)] | .[] | select(.tag_name == \\\"${VERSION}\\\") | .assets | .[] | .browser_download_url | select(test(\\\"x86_64-linux\\\\\\.zip\$\\\"))\"`" \
     && curl -fsSL --output tmp.zip "${URL}" \
     && unzip -d /usr/local/share/procs tmp.zip \
     && ln -sf /usr/local/share/procs/procs /usr/local/bin/procs \
