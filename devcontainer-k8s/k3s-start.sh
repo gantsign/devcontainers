@@ -7,7 +7,7 @@ done
 
 echo 'Starting k3s...'
 
-( k3s server --docker > /var/log/k3s.log 2>&1 ) &
+( k3s server --docker --write-kubeconfig-mode 644 > /var/log/k3s.log 2>&1 ) &
 
 # Execute whatever commands were passed in (if any). This allows us
 # to set this script to ENTRYPOINT while still executing the default CMD.

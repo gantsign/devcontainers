@@ -52,9 +52,6 @@ alias -s tar.zsd='tar -I zstd -tf'
 alias -s ace='unace l'
 alias -s 7z='7z l'
 
-# Remove broken GRC function
-unset -f curl || true
-
 if [ $commands[grcat] ]; then
     # Can't just override curl because you need to merge sysout and syserr
     curl-verbose-color() {
@@ -109,3 +106,22 @@ bindkey "\e[1;4D" dirhistory_zle_dirhistory_back
 bindkey "\e[1;4C" dirhistory_zle_dirhistory_future
 bindkey "\e[1;4A" dirhistory_zle_dirhistory_up
 bindkey "\e[1;4B" dirhistory_zle_dirhistory_down
+
+# Disable zimfw update prompts
+zstyle ':zim' disable-version-check yes
+
+# fzf-tab config
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+# remove bullet from results
+zstyle ':fzf-tab:*' prefix ''
+# always show group
+zstyle ':fzf-tab:*' single-group color header
+# preview apt package info
+zstyle ':fzf-tab:complete:apt:*' fzf-preview '[[ $group == "[package]" ]] && apt-cache show $word'

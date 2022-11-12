@@ -37,13 +37,15 @@ WORKDIR /home/${USERNAME}
 COPY --chown=${USERNAME}:${USERNAME} config .config
 
 # Configure ZSH
-RUN echo "zplug 'plugins/docker', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplugrc.zsh \
-    && echo "zplug 'plugins/docker-compose', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplugrc.zsh
+RUN echo 'zmodule ohmyzsh/ohmyzsh --root plugins -f docker -f docker-compose' \
+        | sed -i '/^# INSERT BEFORE COMPINIT/r /dev/stdin' ~/.zimrc \
+    && echo "zmodule ohmyzsh/ohmyzsh --root plugins\
+        -s 'docker/docker.plugin.zsh'\
+        -s 'docker-compose/docker-compose.plugin.zsh'" \
+        | sed -i '/^# INSERT AFTER COMPINIT/r /dev/stdin' ~/.zimrc
 
-# To run zplug install
-# Workaround: https://github.com/zplug/zplug/issues/272
-RUN bash -c "zsh <<< 'source /usr/share/zplug/init.zsh && zplug clear' \
-    && zsh <<< 'export TERM=xterm && source ~/.zshrc'"
+# To run zimfw install
+RUN zsh -c 'export TERM=xterm && source ~/.zshrc'
 
 USER root
 WORKDIR /
