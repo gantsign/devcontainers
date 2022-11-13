@@ -1,3 +1,6 @@
+# Enable support for multibyte characters
+setopt COMBINING_CHARS
+
 if [ $commands[bat] ]; then
   alias cat='bat --style=plain --pager=never'
   alias less='bat --paging=always'
