@@ -238,10 +238,13 @@ RUN git config --system pull.rebase 'true' && \
     git config --system alias.po 'push origin HEAD' && \
     git config --system alias.pof 'push origin HEAD --force' && \
     git config --system alias.pop 'stash pop' && \
-    git config --system alias.rod '!git rebase origin/$(git dev)' && \
-    git config --system alias.rom '!git rebase origin/$(git main)' && \
+    git config --system alias.rhead "!git remote show origin | grep -Po 'HEAD branch: \K.*'" && \
+    git config --system alias.rod '!git fetch -p && git rebase origin/$(git dev)' && \
+    git config --system alias.roh '!git fetch -p && git rebase origin/$(git rhead)' && \
+    git config --system alias.rom '!git fetch -p && git rebase origin/$(git main)' && \
     git config --system alias.root 'rev-parse --show-toplevel' && \
     git config --system alias.sdp '!git switch $(git dev) && git pull -p' && \
+    git config --system alias.shp '!git fetch -p && git switch $(git rhead) && git pull -p' && \
     git config --system alias.smp '!git switch $(git main) && git pull -p' && \
     git config --system alias.sw 'switch' && \
     git config --system log.date 'format:%a %Y-%m-%d %H:%M:%S %z' && \
