@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 ENV	LC_ALL=en_GB.UTF-8
 
@@ -10,7 +10,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y upgrade --no-install-recommends \
     && apt-get -y install --no-install-recommends \
     apt-transport-https \
+    bat \
     boxes \
+    btop \
     bzip2 \
     ca-certificates \
     command-not-found \
@@ -19,6 +21,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     dirmngr \
     dnsutils \
     dos2unix \
+    duf \
     fd-find \
     file \
     fzf \
@@ -27,6 +30,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     gnupg2 \
     gzip \
     htop \
+    hyperfine \
     iputils-ping \
     jq \
     less \
@@ -58,8 +62,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     zip \
     zsh \
     zstd \
-    # Workaround https://bugs.launchpad.net/ubuntu/+source/rust-bat/+bug/1868517
-    && apt-get -y install --no-install-recommends -o Dpkg::Options::="--force-overwrite" \
     hexyl \
     ripgrep \
     # Cleanup
@@ -72,25 +74,6 @@ ARG USER_GID=$USER_UID
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive  \
     && bash -c "$(curl -fsSL "https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/common-debian.sh")" -- "false" "${USERNAME}" "${USER_UID}" "${USER_GID}" "false" "true" "true" \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install bat (using latest release rather than ubuntu package to get VS Code theme)
-RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/sharkdp/bat/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"bat_[0-9\\\\.]+_amd64\\\\.deb\$\"))'`" \
-    && curl -fsSL --output tmp.deb "${URL}" \
-    && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
-    && rm -f tmp.deb
-
-# Install btop
-RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/aristocratos/btop/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"-x86_64-linux-musl\\\\.tbz\$\"))'`" \
-    && curl -fsSL --output tmp.tbz "${URL}" \
-    && mkdir -p /tmp/btop \
-    && tar -C /tmp/btop --strip-components=2 -xvf tmp.tbz \
-    && rm -f tmp.tbz \
-    && cd /tmp/btop \
-    && ./install.sh \
-    && ./setuid.sh \
-    && rm -rf /tmp/btop
 
 # Install GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -107,13 +90,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 # Install delta
 RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/dandavison/delta/releases \
         | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"git-delta_[0-9\\\\.]+_amd64\\\\.deb\$\"))'`" \
-    && curl -fsSL --output tmp.deb "${URL}" \
-    && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
-    && rm -f tmp.deb
-
-# Install duf
-RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/muesli/duf/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"linux_amd64\\\\.deb\$\"))'`" \
     && curl -fsSL --output tmp.deb "${URL}" \
     && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
     && rm -f tmp.deb
@@ -153,13 +129,6 @@ RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.git
 # Install hurl
 RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/Orange-OpenSource/hurl/releases \
         | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"hurl_[0-9\\\\.]+_amd64\\\\.deb\$\"))'`" \
-    && curl -fsSL --output tmp.deb "${URL}" \
-    && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
-    && rm -f tmp.deb
-
-# Install hyperfine
-RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/sharkdp/hyperfine/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"hyperfine_[0-9\\\\.]+_amd64\\\\.deb\$\"))'`" \
     && curl -fsSL --output tmp.deb "${URL}" \
     && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
     && rm -f tmp.deb
@@ -338,7 +307,7 @@ RUN export PATH="$HOME/.local/bin:$PATH" && python3 -m pipx install http-prompt
 RUN export PATH="$HOME/.local/bin:$PATH" && python3 -m pipx install glances
 
 # Export additional bat themes for use by delta
-RUN bat cache --build
+RUN batcat cache --build
 
 # Copy configuration
 COPY --chown=${USERNAME}:${USERNAME} config .config
