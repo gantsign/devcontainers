@@ -315,6 +315,9 @@ COPY --chown=${USERNAME}:${USERNAME} vimrc.vim .vimrc
 COPY --chown=${USERNAME}:${USERNAME} zshrc.zsh .zshrc
 COPY --chown=${USERNAME}:${USERNAME} zimrc.zsh .zimrc
 
+# Copy script
+COPY --chown=${USERNAME}:${USERNAME} bin/body.sh .local/bin/body
+
 # So we can persist the history using a volume mount
 RUN mkdir -p ~/.shell_history
 
