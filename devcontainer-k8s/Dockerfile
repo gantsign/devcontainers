@@ -10,6 +10,8 @@ RUN curl -fsSL https://get.k3s.io | INSTALL_K3S_SKIP_START=true \
     INSTALL_K3S_SKIP_ENABLE=true sh -s - --docker \
     && mkdir -p /usr/local/share/zsh/plugins/crictl \
     && bash -c "crictl --config <(echo '') completion zsh > /usr/local/share/zsh/plugins/crictl/crictl.zsh"
+# Needs to have a later date than crictl.zsh, so must be in a seaparate layer
+RUN zsh -c 'zcompile -UR /usr/local/share/zsh/plugins/crictl/crictl.zsh'
 
 # Install Helm
 RUN curl -fsSL https://baltocdn.com/helm/signing.asc | \
@@ -89,11 +91,15 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
 # Configure ZSH
-RUN echo "zplug 'plugins/helm', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplugrc.zsh \
-    && echo "zplug 'plugins/kubectl', from:oh-my-zsh, defer:1" >> ~/.config/zsh/zplugrc.zsh \
-    && echo "zplug '/usr/local/share/zsh/plugins/k9s', from:local, defer:1" >> ~/.config/zsh/zplugrc.zsh \
-    && echo "zplug '/usr/local/share/zsh/plugins/kind', from:local, defer:1" >> ~/.config/zsh/zplugrc.zsh \
-    && echo "zplug '/usr/local/share/zsh/plugins/kustomize', from:local, defer:1" >> ~/.config/zsh/zplugrc.zsh
+RUN echo "zmodule '/usr/local/share/zsh/plugins' -f 'k9s' -f 'kustomize'" \
+        | sed -i '/^# INSERT BEFORE COMPINIT/r /dev/stdin' ~/.zimrc \
+    && echo "zmodule ohmyzsh/ohmyzsh --root plugins \
+        -s 'helm/helm.plugin.zsh' -s 'kubectl/kubectl.plugin.zsh'" \
+        | sed -i '/^# INSERT AFTER COMPINIT/r /dev/stdin' ~/.zimrc \
+    && echo "zmodule '/usr/local/share/zsh/plugins/crictl' -s 'crictl.zsh'" \
+        | sed -i '/^# INSERT AFTER COMPINIT/r /dev/stdin' ~/.zimrc \
+    && echo "zmodule '$HOME/.config/zsh' -s 'kuberc.zsh'" \
+        | sed -i '/^# INSERT AFTER COMPINIT/r /dev/stdin' ~/.zimrc
 
 # Enable Kubernetes context and namespace in prompt
 RUN mkdir -p ~/.config \
@@ -103,19 +109,13 @@ RUN mkdir -p ~/.config \
 # Copy configuration
 COPY --chown=${USERNAME}:${USERNAME} config .config
 
-RUN echo 'export KUBECONFIG="$HOME/.kube/config"' >> ~/.config/zsh/env.zsh \
-    && echo "zplug \"\$HOME/.config/zsh\", from:local, use:'kuberc.zsh', defer:1" >> ~/.config/zsh/zplugrc.zsh
+RUN echo 'export KUBECONFIG="$HOME/.kube/config"' >> ~/.config/zsh/env.zshrc
 
 # Create .kube dir so it can be used for a volume mount
 RUN umask 'u=rwx,go=' && mkdir -p "$HOME/.kube"
 
-# Configure ZSH
-RUN echo "zplug '/usr/local/share/zsh/plugins/crictl', from:local, defer:1" >> ~/.config/zsh/zplugrc.zsh
-
-# To run zplug install
-# Workaround: https://github.com/zplug/zplug/issues/272
-RUN bash -c "zsh <<< 'source /usr/share/zplug/init.zsh && zplug clear' \
-    && zsh <<< 'export TERM=xterm && source ~/.zshrc'"
+# To run zimfw install
+RUN zsh -c 'export TERM=xterm && source ~/.zshrc'
 
 USER root
 WORKDIR /

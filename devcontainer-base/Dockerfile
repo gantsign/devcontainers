@@ -56,7 +56,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     wget \
     xz-utils \
     zip \
-    zplug \
     zsh \
     zstd \
     # Workaround https://bugs.launchpad.net/ubuntu/+source/rust-bat/+bug/1868517
@@ -86,7 +85,7 @@ RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.git
         | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"-x86_64-linux-musl\\\\.tbz\$\"))'`" \
     && curl -fsSL --output tmp.tbz "${URL}" \
     && mkdir -p /tmp/btop \
-    && tar -C /tmp/btop -xvf tmp.tbz \
+    && tar -C /tmp/btop --strip-components=2 -xvf tmp.tbz \
     && rm -f tmp.tbz \
     && cd /tmp/btop \
     && ./install.sh \
@@ -250,6 +249,8 @@ RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.git
     && rm -f tmp.tar.gz \
     && mkdir -p /usr/local/share/zsh/plugins/zoxide \
     && zoxide init zsh > /usr/local/share/zsh/plugins/zoxide/zoxide.zsh
+# Needs to have a later date than zoxide.zsh, so must be in a seaparate layer
+RUN zsh -c 'zcompile -UR /usr/local/share/zsh/plugins/zoxide/zoxide.zsh'
 
 # Configure Git
 RUN git config --system pull.rebase 'true' && \
@@ -343,6 +344,7 @@ RUN bat cache --build
 COPY --chown=${USERNAME}:${USERNAME} config .config
 COPY --chown=${USERNAME}:${USERNAME} vimrc.vim .vimrc
 COPY --chown=${USERNAME}:${USERNAME} zshrc.zsh .zshrc
+COPY --chown=${USERNAME}:${USERNAME} zimrc.zsh .zimrc
 
 # So we can persist the history using a volume mount
 RUN mkdir -p ~/.shell_history
@@ -350,11 +352,10 @@ RUN mkdir -p ~/.shell_history
 # So we can persist the zoxide db using a volume mount
 RUN mkdir -p ~/.local/share/zoxide
 
-# To run zplug install
-# Workaround: https://github.com/zplug/zplug/issues/272
-RUN for i in $(seq 1 3); do timeout 30s bash -c "\
-zsh <<< 'rm -rf ~/.zplug/repos; source /usr/share/zplug/init.zsh && zplug clear' \
-&& zsh <<< 'export TERM=xterm && source ~/.zshrc'" && break || [ $i -lt 3 ]; done \
-&& mkdir -p ~/.zplug/repos/robbyrussell/oh-my-zsh/cache/completions
+# To run zimfw install
+RUN for i in $(seq 1 3); do timeout 30s \
+    zsh -c 'export TERM=xterm && source ~/.zshrc' \
+    && break || [ $i -lt 3 ]; done \
+&& mkdir -p ~/.cache/zim/modules/ohmyzsh/cache/completions
 
 CMD [ "zsh" ]

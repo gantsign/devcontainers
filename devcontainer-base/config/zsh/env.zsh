@@ -1,4 +1,4 @@
-export COLORTERM="${COLORTERM:-truecolor}" 
+export COLORTERM="${COLORTERM:-truecolor}"
 
 export PATH="$HOME/.local/bin:$PATH"
 export CDPATH='.:/workspaces'
@@ -7,6 +7,9 @@ export CDPATH='.:/workspaces'
 export LC_ALL='en_GB.UTF-8'
 
 export PAGER="less"
+
+# Needed by some Oh My ZSH plugins
+export ZSH_CACHE_DIR="$HOME/.cache/zim/modules/ohmyzsh/cache"
 
 # So we can persist the history between container instances
 HISTFILE="$HOME/.shell_history/zsh_history"
