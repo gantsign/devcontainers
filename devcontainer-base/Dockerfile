@@ -10,7 +10,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y upgrade --no-install-recommends \
     && apt-get -y install --no-install-recommends \
     apt-transport-https \
-    bat \
     boxes \
     btop \
     bzip2 \
@@ -74,6 +73,13 @@ ARG USER_GID=$USER_UID
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive  \
     && bash -c "$(curl -fsSL "https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/common-debian.sh")" -- "false" "${USERNAME}" "${USER_UID}" "${USER_GID}" "false" "true" "true" \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install bat (using latest release rather than ubuntu package to get VS Code theme)
+RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/sharkdp/bat/releases \
+        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"bat_[0-9\\\\.]+_amd64\\\\.deb\$\"))'`" \
+    && curl -fsSL --output tmp.deb "${URL}" \
+    && export DEBIAN_FRONTEND=noninteractive && dpkg -i ./tmp.deb && apt-get install -f \
+    && rm -f tmp.deb
 
 # Install GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -310,7 +316,7 @@ RUN export PATH="$HOME/.local/bin:$PATH" && python3 -m pipx install http-prompt
 RUN export PATH="$HOME/.local/bin:$PATH" && python3 -m pipx install glances
 
 # Export additional bat themes for use by delta
-RUN batcat cache --build
+RUN bat cache --build
 
 # Copy configuration
 COPY --chown=${USERNAME}:${USERNAME} config .config
