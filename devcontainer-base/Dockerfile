@@ -230,9 +230,9 @@ RUN git config --system pull.rebase 'true' && \
     git config --system alias.co 'checkout' && \
     git config --system alias.dev '!git-develop-branch' && \
     git config --system alias.exec '!exec ' && \
-    git config --system alias.lds 'log --pretty=format:"%C(yellow)%h\ %ad%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --date=short' && \
-    git config --system alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --numstat' && \
-    git config --system alias.ls 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate' && \
+    git config --system alias.lds 'log --pretty=format:"%C(yellow)%h\ %ad%Cred%d\ %Creset%s%Cblue\ [%an]" --decorate --date=short' && \
+    git config --system alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%an]" --decorate --numstat' && \
+    git config --system alias.ls 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%an]" --decorate' && \
     git config --system alias.lt 'log --oneline --graph --decorate --all' && \
     git config --system alias.main '!git-main-branch' && \
     git config --system alias.po 'push origin HEAD' && \
