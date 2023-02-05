@@ -26,7 +26,7 @@ RUN curl -fsSL https://baltocdn.com/helm/signing.asc | \
 
 # Install k9s
 RUN URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/derailed/k9s/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"Linux_x86_64\\\\.tar\\\\.gz\$\"))'`" \
+        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0] | .assets | .[] | .browser_download_url | select(test(\"k9s_Linux_amd64\\\\.tar\\\\.gz\$\"))'`" \
     && curl -fsSL --output tmp.tar.gz "${URL}" \
     && mkdir -p /usr/local/share/k9s \
     && tar -C /usr/local/share/k9s -xvf tmp.tar.gz \
