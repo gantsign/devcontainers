@@ -407,7 +407,7 @@ If you just want to try it out, you can run it standalone:
 
 [source,bash]
 ----
-docker run --rm -ti --user dev --entrypoint zsh ghcr.io/gantsign/devcontainer-python3.9
+docker run --rm -ti --user vscode --entrypoint zsh ghcr.io/gantsign/devcontainer-python3.9
 ----
 
 === Running in VS Code
@@ -440,9 +440,7 @@ Create a `.devcontainer/devcontainer.json` file in the root of your project:
 	"runArgs": [
 		// [Optional] Uncomment for improved security, requires https://github.com/nestybox/sysbox to be installed
 		// "--runtime=sysbox-runc"
-	],
-
-	"remoteUser": "dev",
+	]
 }
 ----
 

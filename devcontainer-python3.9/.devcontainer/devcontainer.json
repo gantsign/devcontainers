@@ -21,6 +21,5 @@
 			"plugins": "autopep8 dirhistory docker fd fzf git-escape-magic gh git grc pip pipenv ripgrep starship sudo zoxide zsh-autosuggestions zsh-syntax-highlighting",
 			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting.git"
 		}
-	},
-	"remoteUser": "dev"
+	}
 }
