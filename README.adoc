@@ -369,6 +369,92 @@ FROM ghcr.io/gantsign/devcontainer-k8s
 Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
 from the menu.
 
+== Python 3.9 container
+
+Unlike the other containers this isn't based on the base container.
+
+=== Features
+
+In addition to basic GNU/Linux command line tools this container contains the
+following:
+
+* https://github.com/devcontainers/features/tree/main/src/common-utils
+** https://ohmyz.sh[Oh My Zsh] for tab-completion and aliases
+* https://github.com/devcontainers/features/tree/main/src/docker-in-docker
+* https://github.com/devcontainers/features/tree/main/src/github-cli
+** https://github.com/cli/cli[GitHub CLI] to make GitHub easier to work with from the command line
+* https://github.com/devcontainers-contrib/features/tree/main/src/apt-get-packages
+** https://github.com/junegunn/fzf[fzf] a general-purpose command-line fuzzy finder
+** https://github.com/garabik/grc[Generic Colouriser] add color output to many basic GNU/Linux commands
+** https://github.com/koalaman/shellcheck[ShellCheck] static analysis tool for shell scripts
+** https://github.com/ajeetdsouza/zoxide[zoxide] easily navigate to previous directories
+* https://github.com/devcontainers-contrib/features/tree/main/src/fd
+** https://github.com/sharkdp/fd[fd] an easier to use `find` alternative
+* https://github.com/devcontainers-contrib/features/tree/main/src/ripgrep
+** https://github.com/BurntSushi/ripgrep[ripgrep] for searching files/directories for text
+* https://github.com/devcontainers-contrib/features/tree/main/src/
+** https://github.com/mvdan/sh[shfmt] shell script formatter
+* https://github.com/devcontainers-contrib/features/tree/main/src/starship
+** https://starship.rs[starship] a full featured shell prompt
+* https://github.com/devcontainers-contrib/features/tree/main/src/zsh-plugins
+** https://github.com/zsh-users/zsh-autosuggestions[zsh-autosuggestions] suggests commands as you type based on history and completions
+** https://github.com/zsh-users/zsh-syntax-highlighting[zsh-syntax-highlighting] syntax highlighting for the command line
+
+
+=== Running standalone
+
+If you just want to try it out, you can run it standalone:
+
+[source,bash]
+----
+docker run --rm -ti --user dev --entrypoint zsh ghcr.io/gantsign/devcontainer-python3.9
+----
+
+=== Running in VS Code
+
+Create a `.devcontainer/devcontainer.json` file in the root of your project:
+
+..devcontainer/devcontainer.json
+[source,js]
+----
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "GantSign",
+	"image": "ghcr.io/gantsign/devcontainer-python3.9",
+
+	"settings": {
+		"editor.renderWhitespace": "all",
+		"editor.rulers": [
+			80,
+			100,
+			120
+		],
+		"editor.guides.bracketPairs": true
+	},
+
+	"extensions": [
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	],
+
+	"runArgs": [
+		// [Optional] Uncomment for improved security, requires https://github.com/nestybox/sysbox to be installed
+		// "--runtime=sysbox-runc"
+	],
+
+	"remoteUser": "dev",
+}
+----
+
+[NOTE]
+====
+For Docker-in-Docker to work, it either needs to be run with
+https://github.com/nestybox/sysbox[sysbox] `--runtime=sysbox-runc` (which you
+need to install on your host machine) or with the `--privileged` flag. See
+https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/ for
+why you should avoid the `--privileged` flag.
+====
+
 == License
 
 This project uses the Unlicense but the resulting container images contain
