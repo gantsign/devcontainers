@@ -169,7 +169,7 @@ RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api
     && rm -f tmp.zip \
     && mkdir -p /usr/local/share/zsh/plugins/procs \
     && cd /usr/local/share/zsh/plugins/procs \
-    && procs --completion zsh
+    && procs --gen-completion zsh
 
 # Install sd
 RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/chmln/sd/releases \
