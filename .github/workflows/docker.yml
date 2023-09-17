@@ -36,7 +36,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker (devcontainer-base)
         id: meta_base
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
@@ -73,7 +73,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker (devcontainer-dind)
         id: meta_dind
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
@@ -110,7 +110,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker (devcontainer-k8s)
         id: meta_k8s
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
