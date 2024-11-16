@@ -201,7 +201,7 @@ RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api
 
 # Install tokei
 RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/XAMPPRocky/tokei/releases \
-        | jq --raw-output '[.[] | select(.prerelease == false)] | .[0].tag_name'`" \
+        | jq --raw-output '[.[] | select(.prerelease == false) | select(.tag_name | index("alpha") | not)] | .[0].tag_name'`" \
     && URL="https://raw.githubusercontent.com/XAMPPRocky/tokei/${VERSION}/LICENCE-MIT" \
     && mkdir -p /usr/local/share/tokei \
     && curl -fsSL --output /usr/local/share/tokei/LICENSE "${URL}" \
