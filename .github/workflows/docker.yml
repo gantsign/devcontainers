@@ -139,8 +139,8 @@ jobs:
             org.opencontainers.image.created=${{ fromJSON(steps.meta_k8s.outputs.json).labels['org.opencontainers.image.created'] }}
             org.opencontainers.image.revision=${{ fromJSON(steps.meta_k8s.outputs.json).labels['org.opencontainers.image.revision'] }}
 
-      - name: Build and push Docker image (devcontainer-python3.9)
+      - name: Build and push Docker image (devcontainer-python3.10)
         uses: devcontainers/ci@v0.3
         with:
-          subFolder: devcontainer-python3.9
-          imageName: ghcr.io/gantsign/devcontainer-python3.9
+          subFolder: devcontainer-python3.10
+          imageName: ghcr.io/gantsign/devcontainer-python3.10
