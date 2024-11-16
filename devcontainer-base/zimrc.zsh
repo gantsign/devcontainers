@@ -11,6 +11,7 @@ zmodule ohmyzsh/ohmyzsh --root plugins \
 
 zmodule '/usr/local/share/zsh/plugins' \
     -f 'procs' \
+    -f 'sd' \
     -f 'starship'
 
 if [ -f ~/.config/zsh/zim_before_compinit.zsh ]; then
