@@ -174,14 +174,15 @@ RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api
 # Install sd
 RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/chmln/sd/releases \
         | jq --raw-output '[.[] | select(.prerelease == false)] | .[0].tag_name'`" \
-    && URL="https://raw.githubusercontent.com/chmln/sd/${VERSION}/LICENSE" \
-    && mkdir -p /usr/local/share/sd \
-    && curl -fsSL --output /usr/local/share/sd/LICENSE "${URL}" \
     && URL="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/chmln/sd/releases \
-        | jq --raw-output \"[.[] | select(.prerelease == false)] | .[] | select(.tag_name == \\\"${VERSION}\\\") | .assets | .[] | .browser_download_url | select(test(\\\"x86_64-unknown-linux-gnu\$\\\"))\"`" \
-    && curl -fsSL --output /usr/local/share/sd/sd "${URL}" \
-    && chmod +x /usr/local/share/sd/sd \
-    && ln -sf /usr/local/share/sd/sd /usr/local/bin/sd
+        | jq --raw-output \"[.[] | select(.prerelease == false)] | .[] | select(.tag_name == \\\"${VERSION}\\\") | .assets | .[] | .browser_download_url | select(test(\\\"x86_64-unknown-linux-gnu.tar.gz\$\\\"))\"`" \
+    && curl -fsSL --output tmp.tar.gz "${URL}" \
+    && mkdir -p /usr/local/share/sd \
+    && tar --strip-components=1 -C /usr/local/share/sd -xvf tmp.tar.gz \
+    && rm -f tmp.tar.gz \
+    && ln -sf /usr/local/share/sd/sd /usr/local/bin/sd \
+    && mkdir -p /usr/local/share/zsh/plugins/sd \
+    && ln -sf /usr/local/share/sd/completions/_sd /usr/local/share/zsh/plugins/sd/_sd
 
 # Install starship
 RUN VERSION="`curl -fsSL -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/starship/starship/releases \
