@@ -369,7 +369,7 @@ FROM ghcr.io/gantsign/devcontainer-k8s
 Then press `Ctrl-P` and select "Remote-Containers: Open Folder in Container..."
 from the menu.
 
-== Python 3.10 container
+== Python 3.12 container
 
 Unlike the other containers this isn't based on the base container.
 
@@ -407,7 +407,7 @@ If you just want to try it out, you can run it standalone:
 
 [source,bash]
 ----
-docker run --rm -ti --user vscode --entrypoint zsh ghcr.io/gantsign/devcontainer-python3.10
+docker run --rm -ti --user vscode --entrypoint zsh ghcr.io/gantsign/devcontainer-python3.12
 ----
 
 === Running in VS Code
@@ -420,7 +420,7 @@ Create a `.devcontainer/devcontainer.json` file in the root of your project:
 // For format details, see https://aka.ms/devcontainer.json
 {
 	"name": "GantSign",
-	"image": "ghcr.io/gantsign/devcontainer-python3.10",
+	"image": "ghcr.io/gantsign/devcontainer-python3.12",
 
 	"settings": {
 		"editor.renderWhitespace": "all",
