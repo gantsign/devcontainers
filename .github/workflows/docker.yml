@@ -54,7 +54,7 @@ jobs:
           cache-from: type=registry,ref=${{ fromJSON(steps.meta_base.outputs.json).tags[1] }}
           cache-to: type=inline
           no-cache: ${{ github.event_name != 'pull_request' }}
-          # Omit licenses label as there's no pratical way to get an accurate value for all the Ubuntu packages
+          # Omit licenses label as there's no practical way to get an accurate value for all the Ubuntu packages
           # org.opencontainers.image.licenses=
           labels: |
             org.opencontainers.image.title=${{ fromJSON(steps.meta_base.outputs.json).labels['org.opencontainers.image.title'] }}
@@ -91,7 +91,7 @@ jobs:
           cache-from: type=registry,ref=${{ fromJSON(steps.meta_dind.outputs.json).tags[1] }}
           cache-to: type=inline
           no-cache: ${{ github.event_name != 'pull_request' }}
-          # Omit licenses label as there's no pratical way to get an accurate value for all the Ubuntu packages
+          # Omit licenses label as there's no practical way to get an accurate value for all the Ubuntu packages
           # org.opencontainers.image.licenses=
           labels: |
             org.opencontainers.image.title=${{ fromJSON(steps.meta_dind.outputs.json).labels['org.opencontainers.image.title'] }}
@@ -128,7 +128,7 @@ jobs:
           cache-from: type=registry,ref=${{ fromJSON(steps.meta_k8s.outputs.json).tags[1] }}
           cache-to: type=inline
           no-cache: ${{ github.event_name != 'pull_request' }}
-          # Omit licenses label as there's no pratical way to get an accurate value for all the Ubuntu packages
+          # Omit licenses label as there's no practical way to get an accurate value for all the Ubuntu packages
           # org.opencontainers.image.licenses=
           labels: |
             org.opencontainers.image.title=${{ fromJSON(steps.meta_k8s.outputs.json).labels['org.opencontainers.image.title'] }}
@@ -139,8 +139,8 @@ jobs:
             org.opencontainers.image.created=${{ fromJSON(steps.meta_k8s.outputs.json).labels['org.opencontainers.image.created'] }}
             org.opencontainers.image.revision=${{ fromJSON(steps.meta_k8s.outputs.json).labels['org.opencontainers.image.revision'] }}
 
-      - name: Build and push Docker image (devcontainer-python3.10)
+      - name: Build and push Docker image (devcontainer-python3.12)
         uses: devcontainers/ci@v0.3
         with:
-          subFolder: devcontainer-python3.10
-          imageName: ghcr.io/gantsign/devcontainer-python3.10
+          subFolder: devcontainer-python3.12
+          imageName: ghcr.io/gantsign/devcontainer-python3.12
